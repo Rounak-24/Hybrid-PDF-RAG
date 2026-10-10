@@ -1,0 +1,14 @@
+name: 'docTalk_backend'
+
+services:
+  vector-db: 
+    container_name: 'vector_store'
+    image: qdrant/qdrant
+    ports:
+      - 6333:6333
+    volumes:
+      - qdrant_data:/data
+
+
+volumes:
+  qdrant_data:
