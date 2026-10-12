@@ -2,8 +2,6 @@ from fastapi import UploadFile, HTTPException, File
 from pathlib import Path
 import uuid
 import shutil
-import os
-from app.indexing.workflow.graph import index_file
 
 
 def save_file(file:UploadFile):
@@ -28,8 +26,6 @@ def save_file(file:UploadFile):
     finally: file.file.close()
 
 
-
-
 async def upload_file_controller(file:UploadFile = File(...)):
     try:
         if file==None:
@@ -40,9 +36,6 @@ async def upload_file_controller(file:UploadFile = File(...)):
             raise HTTPException(400,"invalid file type")
         
         local_file_path, unique_file_id = save_file(file)
-        done_indexing = await index_file(local_file_path, str(unique_file_id))
-
-        if Path(local_file_path).exists(): os.remove(local_file_path)
         
         return {
             "success":True,
@@ -50,7 +43,7 @@ async def upload_file_controller(file:UploadFile = File(...)):
             "message":"File has been uploaded successfully",
             "filename_in_server": local_file_path,
             "unique_file_id":unique_file_id,
-            "indexing": done_indexing
+            "indexing": False
         }
 
     except Exception as e:

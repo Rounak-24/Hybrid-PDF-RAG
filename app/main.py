@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 import uvicorn
 from app.api.routes.upload_route import upload_router
+from app.api.routes.query_route import query_router
 from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
 
 app.include_router(upload_router,prefix="/upload")
+app.include_router(query_router,prefix="/query")
 
 @app.get("/health")
 async def health_handler():
